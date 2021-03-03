@@ -1,62 +1,46 @@
-import { useQuery } from "react-query";
-import axios from "axios";
-import { Box, Flex, Grid, Text, Heading } from "@chakra-ui/react";
-import { Player, Controls } from "@lottiefiles/react-lottie-player";
-import testLottie from "./among-us.json";
-
-// const url = `https://assets10.lottiefiles.com/private_files/lf30_k5obblw6.json`;
-// const url = `https://assets4.lottiefiles.com/packages/lf20_x6wwkwp2.json`;
-// const colorsAPI = "https://editor-api.lottiefiles.com/colors"
+import { useState } from "react"
+import { Box, Flex, Grid, Text, Heading } from "@chakra-ui/react"
+import { Player, Controls } from "@lottiefiles/react-lottie-player"
+import testLottie from "./among-us.json"
+import FileBase64 from "react-file-base64"
+import { composeNewLayer } from "./parser"
 
 function App() {
-  // const { data } = useQuery(url, async () => {
-  //   const { data } = await axios.get(url);
-  //   return data;
-  // });
-  // const colorQuery = useQuery([colorsAPI, url, "colors"], async () => {
-  //   const { data } = await axios.post(colorsAPI, { url, type: "shape", color: "" })
-  //   return data
-  // })
-  console.log(testLottie);
+  const [lottieFile, setLottieFile] = useState(testLottie)
+  const onImageUploaded = (newImage) => {
+    const newLottie = composeNewLayer(lottieFile, newImage)
+    setLottieFile(newLottie)
+  }
 
   return (
-    <Grid gridTemplateColumns="1fr 2fr 1fr" h="100vh" w="100vw">
-      <Flex
-        flexDir="column"
-        m="4"
-        overflow="auto"
-        height="90%"
-        borderRight="2px"
-      >
+    <Grid gridTemplateColumns="1fr 2fr 1fr">
+      <Flex flexDir="column" m="4" overflow="auto" borderRight="2px">
+        <Flex mb="4" flexDir="column">
+          <Heading mb="4" size="md">
+            Upload your images
+          </Heading>
+          <FileBase64 onDone={onImageUploaded} />
+        </Flex>
         <Heading size="md" mb="4">
           Layers
         </Heading>
-        {testLottie.layers.map((layer) => (
+        {lottieFile.layers.map((layer) => (
           <Flex mb="4" alignItems="center" key={layer.nm}>
             <Box w="50px" h="50x" borderRadius="4px " bg="white">
-              <Player
-                src={{
-                  ...testLottie,
-                  layers: testLottie.layers.filter((i) => i.nm === layer.nm),
-                }}
-              />
+              <Player src={{ ...lottieFile, layers: lottieFile.layers.filter((i) => i.nm === layer.nm) }} />
             </Box>
-
             <Text ml="2">{layer.nm}</Text>
           </Flex>
         ))}
       </Flex>
-      <Flex margin="auto 4em">
-        <Player autoplay loop src={testLottie}>
-          <Controls
-            visible={true}
-            buttons={["play", "repeat", "frame", "debug"]}
-          />
+      <Flex margin="auto 4em" flexDir="column">
+        <Player autoplay loop src={lottieFile}>
+          <Controls visible={true} buttons={["play", "repeat", "frame", "debug"]} />
         </Player>
       </Flex>
-      <div>Configs</div>
+      <Box></Box>
     </Grid>
-  );
+  )
 }
 
-export default App;
+export default App

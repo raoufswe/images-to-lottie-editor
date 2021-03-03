@@ -2,7 +2,9 @@ import { extendTheme } from "@chakra-ui/react"
 
 export default extendTheme({
   styles: {
-    global: {}
+    global: {
+      body: { overflow: "hidden" }
+    }
   },
   fonts: {
     body: "DM Sans, sans-serif",
