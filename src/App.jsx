@@ -1,9 +1,9 @@
-import { Box, Flex, Grid, Text, Heading } from "@chakra-ui/react";
+import { Box, Flex, Grid, Text, Heading, Button } from "@chakra-ui/react";
 import { Player, Controls } from "@lottiefiles/react-lottie-player";
 import FileBase64 from "react-file-base64";
 import LayerOptions from "./components/LayerOptions";
 import useStore from "./store";
-import AnimationsOptions from "./components/AnimationsOptions";
+import NumberInput from "./components/NumberInput";
 
 function App() {
   const {
@@ -12,6 +12,7 @@ function App() {
     visibleLayers,
     setImage,
     setSelectedLayer,
+    setFrameRate,
   } = useStore();
 
   return (
@@ -82,9 +83,33 @@ function App() {
         </Player>
       </Flex>
 
-      <Box p="2rem" borderLeft="1px">
-        {selectedLayer && <LayerOptions />}
-      </Box>
+      <Flex
+        flexDir="column"
+        overflow="auto"
+        borderRight="2px"
+        w="100%"
+        h="100vh"
+      >
+        <Box p="2rem" borderLeft="1px" overflow="auto" h="100vh">
+          <NumberInput
+            defaultValue={lottieFile.fr}
+            label="Frame rate"
+            name="frameRate"
+            onChange={setFrameRate}
+          />
+          <a
+            href={`data:text/json;charset=utf-8,${encodeURIComponent(
+              JSON.stringify(lottieFile)
+            )}`}
+            download={`lottie_${Date.now()}.json`}
+          >
+            <Button colorScheme="blue" mb="3" w="100%">
+              Download as JSON
+            </Button>
+          </a>
+          {selectedLayer && <LayerOptions />}
+        </Box>
+      </Flex>
     </Grid>
   );
 }

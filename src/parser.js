@@ -18,8 +18,8 @@ export const composeNewLayer = (lottieFile, newImage) => {
         ks: {
           o: { a: 0, k: 100, ix: 11 },
           r: { a: 0, k: 0, ix: 10 },
-          p: { a: 0, k: [450, 380, 0], ix: 2 },
-          a: { a: 0, k: [402.391, 302.085, 0], ix: 2 },
+          p: { k: [0, 0] },
+          a: { a: 0, k: [0, 0], ix: 2 },
           s: {
             a: 1,
             k: [
@@ -44,10 +44,10 @@ export const composeNewLayer = (lottieFile, newImage) => {
   };
 };
 
-export const bounceAnimation = {
+const bounceAnimation = {
   o: { a: 0, k: 100, ix: 11 },
   r: { a: 0, k: 0, ix: 10 },
-  p: { a: 0, k: [450, 380, 400], ix: 2 },
+  p: { k: [0, 0] },
   a: { a: 0, k: [402.391, 302.085, 0], ix: 2 },
   s: {
     a: 1,
@@ -56,19 +56,19 @@ export const bounceAnimation = {
         i: { x: [0.667, 0.667, 0.667], y: [1, 1, 1] },
         o: { x: [0.333, 0.333, 0.333], y: [0, 0, 0] },
         t: 0,
-        s: [100, 100, 0],
+        s: [100, 100, 100],
       },
       {
         i: { x: [0.667, 0.667, 0.667], y: [1, 1, 1] },
         o: { x: [0.333, 0.333, 0.333], y: [0, 0, 0] },
-        t: 15,
+        t: 13.5,
         s: [100, 50, 100],
       },
       {
         i: { x: [0.667, 0.667, 0.667], y: [1, 1, 1] },
         o: { x: [0.333, 0.333, 0.333], y: [0, 0, 0] },
-        t: 30,
-        s: [100, 100, 0],
+        t: 27,
+        s: [100, 100, 100],
       },
       { t: 59.0000024031193, s: [100, 100, 100] },
     ],
@@ -76,7 +76,7 @@ export const bounceAnimation = {
   },
 };
 
-export const appearAnimation = {
+const appearAnimation = {
   ty: "tr",
   o: { k: 100 },
   r: { k: 0 },
@@ -111,7 +111,7 @@ export const appearAnimation = {
   sa: { k: 0 },
 };
 
-export const rotateAnimation = {
+const rotateAnimation = {
   ty: "tr",
   o: { k: 100 },
   r: { k: 0 },
@@ -133,7 +133,7 @@ export const rotateAnimation = {
         to: [0, -6.63, 0],
         ti: [0, -0.48, 0],
       },
-      { t: 51, s: [0, 0, 0] },
+      { t: 26, s: [0, 0, 0] },
     ],
     ix: 2,
     a: 1,
@@ -199,8 +199,8 @@ export const moveAsset = (lottieFile, selected_layer, { x, y }) => {
         layer.ks.a = {
           ...layer.ks.a,
           k: [
-            x ? parseInt(x) : selected_layer.ks.a.k[0],
-            y ? parseInt(y) : selected_layer.ks.a.k[1],
+            x ? parseFloat(x) : parseFloat(layer.ks.a.k[0]),
+            y ? parseFloat(y) : parseFloat(layer.ks.a.k[1]),
             0,
           ],
         };
@@ -214,12 +214,19 @@ export const getAsset = (lottieFile, id) => {
   return lottieFile.assets.find((asset) => asset.id === id);
 };
 
+export const updateFrameRate = (lottieFile, newFrameRate) => {
+  let cloned = JSON.parse(JSON.stringify(lottieFile));
+  cloned.fr = parseFloat(newFrameRate);
+  return cloned;
+};
+
 export const updateAnimation = (lottieFile, selected_layer, index) => {
   let cloned = JSON.parse(JSON.stringify(lottieFile));
   return {
     ...cloned,
     layers: [...cloned.layers].map((layer) => {
       if (layer.nm === selected_layer?.nm) {
+        index === 0 && (animations[index].a = layer.ks.a);
         layer.ks = animations[index];
         return layer;
       }

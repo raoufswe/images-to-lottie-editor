@@ -9,6 +9,7 @@ import {
   getAsset,
   moveAsset,
   updateAnimation,
+  updateFrameRate,
 } from "./parser";
 
 const useStore = create((set, get) => ({
@@ -21,6 +22,7 @@ const useStore = create((set, get) => ({
   h: null,
   x: null,
   y: null,
+  fr: null,
   setImage: (image) => {
     const lottieFile = composeNewLayer(get().lottieFile, image);
     set({ lottieFile });
@@ -69,7 +71,7 @@ const useStore = create((set, get) => ({
     });
     set({ w, lottieFile });
   },
-  setAssetHeigh: (h) => {
+  setAssetHeight: (h) => {
     const lottieFile = resizeAsset(get().lottieFile, get().selectedLayer, {
       h,
     });
@@ -89,6 +91,10 @@ const useStore = create((set, get) => ({
       get().selectedLayer,
       index
     );
+    set({ lottieFile });
+  },
+  setFrameRate: (frameRate) => {
+    const lottieFile = updateFrameRate(get().lottieFile, frameRate);
     set({ lottieFile });
   },
 }));

@@ -6,9 +6,7 @@ export default function AnimationsOptions() {
   const { setAnimation } = useStore();
   return (
     <>
-      <Heading size="sm" mb="2" pt="5">
-        Animations
-      </Heading>
+      <Heading size="sm">Animations</Heading>
       <Flex flexDir="column">
         {animations.map((animation, index) => (
           <Button

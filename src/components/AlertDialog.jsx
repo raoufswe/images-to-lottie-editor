@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useState, useRef } from "react";
 import {
   AlertDialog as ChakaraDeleteDialog,
   AlertDialogBody,
@@ -6,26 +6,33 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
-  Button
-} from "@chakra-ui/react"
+  Button,
+} from "@chakra-ui/react";
 
 export default function AlertDialog({ title, onDelete }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const onClose = () => setIsOpen(false)
-  const cancelRef = useRef()
+  const [isOpen, setIsOpen] = useState(false);
+  const onClose = () => setIsOpen(false);
+  const cancelRef = useRef();
 
   return (
     <>
-      <Button colorScheme="red" onClick={() => setIsOpen(true)} mt="4">
+      <Button colorScheme="red" onClick={() => setIsOpen(true)} mt="4" w="100%">
         {title}
       </Button>
-      <ChakaraDeleteDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose} isCentered>
+      <ChakaraDeleteDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+        isCentered
+      >
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
               {title}
             </AlertDialogHeader>
-            <AlertDialogBody>Are you sure? You can't undo this action afterwards.</AlertDialogBody>
+            <AlertDialogBody>
+              Are you sure? You can't undo this action afterwards.
+            </AlertDialogBody>
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={onClose}>
                 Cancel
@@ -33,8 +40,8 @@ export default function AlertDialog({ title, onDelete }) {
               <Button
                 colorScheme="red"
                 onClick={() => {
-                  onDelete()
-                  onClose()
+                  onDelete();
+                  onClose();
                 }}
                 ml={3}
               >
@@ -45,5 +52,5 @@ export default function AlertDialog({ title, onDelete }) {
         </AlertDialogOverlay>
       </ChakaraDeleteDialog>
     </>
-  )
+  );
 }
