@@ -1,15 +1,28 @@
-import { Box, Flex, Grid, Text, Heading } from "@chakra-ui/react"
-import { Player, Controls } from "@lottiefiles/react-lottie-player"
-import FileBase64 from "react-file-base64"
-import LayerOptions from "./components/LayerOptions"
-import useStore from "./store"
+import { Box, Flex, Grid, Text, Heading } from "@chakra-ui/react";
+import { Player, Controls } from "@lottiefiles/react-lottie-player";
+import FileBase64 from "react-file-base64";
+import LayerOptions from "./components/LayerOptions";
+import useStore from "./store";
+import AnimationsOptions from "./components/AnimationsOptions";
 
 function App() {
-  const { lottieFile, selectedLayer, visibleLayers, setImage, setSelectedLayer } = useStore()
+  const {
+    lottieFile,
+    selectedLayer,
+    visibleLayers,
+    setImage,
+    setSelectedLayer,
+  } = useStore();
 
   return (
     <Grid gridTemplateColumns="1fr 2fr 1fr">
-      <Flex flexDir="column" overflow="auto" borderRight="2px" w="100%" h="100vh">
+      <Flex
+        flexDir="column"
+        overflow="auto"
+        borderRight="2px"
+        w="100%"
+        h="100vh"
+      >
         <Flex p="4" flexDir="column">
           <Heading mb="2" size="sm" color="gray.500">
             Upload your images
@@ -35,7 +48,12 @@ function App() {
               borderRadius="4px"
             >
               <Box w="48px" h="48x" borderRadius="4px " bg="white">
-                <Player src={{ ...lottieFile, layers: lottieFile.layers.filter((i) => i.nm === layer.nm) }} />
+                <Player
+                  src={{
+                    ...lottieFile,
+                    layers: lottieFile.layers.filter((i) => i.nm === layer.nm),
+                  }}
+                />
               </Box>
               <Text ml="2" fontSize="sm">
                 {layer.nm}
@@ -49,11 +67,18 @@ function App() {
         <Player
           autoplay
           loop
-          src={{ ...lottieFile, layers: lottieFile.layers.filter((i) => visibleLayers.map((i) => i.nm).includes(i.nm)) }}
-          style={{ width: 500, height: 500, background: "white",
-            borderRadius: "8px 8px 0 0 "}}
+          src={{
+            ...lottieFile,
+            layers: lottieFile.layers.filter((i) =>
+              visibleLayers.map((i) => i.nm).includes(i.nm)
+            ),
+          }}
+          style={{ width: 500, height: 500, borderRadius: "8px 8px 0 0 " }}
         >
-          <Controls visible={true} buttons={["play", "repeat", "frame", "debug"]} />
+          <Controls
+            visible={true}
+            buttons={["play", "repeat", "frame", "debug"]}
+          />
         </Player>
       </Flex>
 
@@ -61,7 +86,7 @@ function App() {
         {selectedLayer && <LayerOptions />}
       </Box>
     </Grid>
-  )
+  );
 }
 
-export default App
+export default App;
