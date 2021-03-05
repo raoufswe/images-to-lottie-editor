@@ -1,29 +1,16 @@
-import { Box, Flex, Grid, Text, Heading, Button } from "@chakra-ui/react";
-import { Player, Controls } from "@lottiefiles/react-lottie-player";
-import FileBase64 from "react-file-base64";
-import LayerOptions from "./components/LayerOptions";
-import useStore from "./store";
-import NumberInput from "./components/NumberInput";
+import { Box, Flex, Grid, Text, Heading, Button } from "@chakra-ui/react"
+import { Player, Controls } from "@lottiefiles/react-lottie-player"
+import FileBase64 from "react-file-base64"
+import LayerOptions from "./components/LayerOptions"
+import useStore from "./store"
+import NumberInput from "./components/NumberInput"
 
 function App() {
-  const {
-    lottieFile,
-    selectedLayer,
-    visibleLayers,
-    setImage,
-    setSelectedLayer,
-    setFrameRate,
-  } = useStore();
+  const { lottieFile, selectedLayer, visibleLayers, setImage, setSelectedLayer, setFrameRate } = useStore()
 
   return (
     <Grid gridTemplateColumns="1fr 2fr 1fr">
-      <Flex
-        flexDir="column"
-        overflow="auto"
-        borderRight="2px"
-        w="100%"
-        h="100vh"
-      >
+      <Flex flexDir="column" overflow="auto" borderRight="2px" w="100%" h="100vh">
         <Flex p="4" flexDir="column">
           <Heading mb="2" size="sm" color="gray.500">
             Upload your images
@@ -52,7 +39,7 @@ function App() {
                 <Player
                   src={{
                     ...lottieFile,
-                    layers: lottieFile.layers.filter((i) => i.nm === layer.nm),
+                    layers: lottieFile.layers.filter((i) => i.nm === layer.nm)
                   }}
                 />
               </Box>
@@ -70,39 +57,18 @@ function App() {
           loop
           src={{
             ...lottieFile,
-            layers: lottieFile.layers.filter((i) =>
-              visibleLayers.map((i) => i.nm).includes(i.nm)
-            ),
+            layers: lottieFile.layers.filter((i) => visibleLayers.map((i) => i.nm).includes(i.nm))
           }}
           style={{ width: 500, height: 500, borderRadius: "8px 8px 0 0 " }}
         >
-          <Controls
-            visible={true}
-            buttons={["play", "repeat", "frame", "debug"]}
-          />
+          <Controls visible={true} buttons={["play", "repeat", "frame", "debug"]} />
         </Player>
       </Flex>
 
-      <Flex
-        flexDir="column"
-        overflow="auto"
-        borderRight="2px"
-        w="100%"
-        h="100vh"
-      >
+      <Flex flexDir="column" overflow="auto" borderRight="2px" w="100%" h="100vh">
         <Box p="2rem" borderLeft="1px" overflow="auto" h="100vh">
-          <NumberInput
-            defaultValue={lottieFile.fr}
-            label="Frame rate"
-            name="frameRate"
-            onChange={setFrameRate}
-          />
-          <a
-            href={`data:text/json;charset=utf-8,${encodeURIComponent(
-              JSON.stringify(lottieFile)
-            )}`}
-            download={`lottie_${Date.now()}.json`}
-          >
+          <NumberInput defaultValue={lottieFile.fr} label="Frame rate" name="frameRate" onChange={setFrameRate} />
+          <a href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(lottieFile))}`} download={`lottie_${Date.now()}.json`}>
             <Button colorScheme="blue" mb="3" w="100%">
               Download as JSON
             </Button>
@@ -111,7 +77,7 @@ function App() {
         </Box>
       </Flex>
     </Grid>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -1,10 +1,10 @@
-import { Flex, Button, Box } from "@chakra-ui/react";
-import useStore from "../../store";
-import NumberInput from "../NumberInput";
-import Switch from "../Switch";
-import Slider from "../Slider";
-import AlertDialog from "../AlertDialog";
-import AnimationsOptions from "../AnimationsOptions";
+import { Flex, Box } from "@chakra-ui/react"
+import useStore from "../../store"
+import NumberInput from "../NumberInput"
+import Switch from "../Switch"
+import Slider from "../Slider"
+import AlertDialog from "../AlertDialog"
+import AnimationsOptions from "../AnimationsOptions"
 
 export default function LayerOptions() {
   const {
@@ -23,10 +23,10 @@ export default function LayerOptions() {
     setAssetHeight,
     setAssetXPosition,
     setAssetYPosition,
-    deleteLayer,
-  } = useStore();
+    deleteLayer
+  } = useStore()
 
-  const isVisible = isSelectedLayerVisible();
+  const isVisible = isSelectedLayerVisible()
 
   return (
     <Flex flexDir="column" w="100%" h="100%">
@@ -42,34 +42,10 @@ export default function LayerOptions() {
       <Slider label="Opacity:" onChange={setOpacity} defaultValue={opacity} />
       {selectedAsset && (
         <>
-          <NumberInput
-            label="Width"
-            name="w"
-            defaultValue={selectedAsset.w}
-            value={w}
-            onChange={setAssetWidth}
-          />
-          <NumberInput
-            label="Height"
-            name="h"
-            defaultValue={selectedAsset.h}
-            value={h}
-            onChange={setAssetHeight}
-          />
-          <NumberInput
-            label="Position X"
-            name="x"
-            defaultValue={selectedLayer.ks.a.k[0]}
-            value={x}
-            onChange={setAssetXPosition}
-          />
-          <NumberInput
-            label="Position Y"
-            name="x"
-            defaultValue={selectedLayer.ks.a.k[1]}
-            onChange={setAssetYPosition}
-            value={y}
-          />
+          <NumberInput label="Width" name="w" defaultValue={selectedAsset.w} value={w} onChange={setAssetWidth} />
+          <NumberInput label="Height" name="h" defaultValue={selectedAsset.h} value={h} onChange={setAssetHeight} />
+          <NumberInput label="Position X" name="x" defaultValue={selectedLayer.ks.a.k[0]} value={x} onChange={setAssetXPosition} />
+          <NumberInput label="Position Y" name="x" defaultValue={selectedLayer.ks.a.k[1]} onChange={setAssetYPosition} value={y} />
         </>
       )}
 
@@ -79,5 +55,5 @@ export default function LayerOptions() {
         <AlertDialog title="Delete layer" onDelete={deleteLayer} />
       </Box>
     </Flex>
-  );
+  )
 }
