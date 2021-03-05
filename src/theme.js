@@ -7,9 +7,9 @@ export default extendTheme({
     }
   },
   fonts: {
-    body: "DM Sans, sans-serif",
-    heading: "DM Sans, sans-serif",
-    mono: "DM Sans, sans-serif"
+    body: "'Montserrat', sans-serif",
+    heading: "'Montserrat', sans-serif",
+    mono: "'Montserrat', sans-serif"
   },
   config: {
     initialColorMode: "dark",
