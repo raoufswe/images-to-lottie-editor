@@ -8,9 +8,9 @@ export default function AnimationsOptions() {
     <>
       <Text size="sm">Animations</Text>
       <Flex flexDir="column">
-        {animations.map(({ name, value }) => (
-          <Button colorScheme="teal" mt="4" key={name} onClick={() => setAnimation(value)}>
-            {name}
+        {animations.map((item, index) => (
+          <Button colorScheme="teal" mt="4" key={item.name} onClick={() => setAnimation(index)}>
+            {item.name}
           </Button>
         ))}
       </Flex>

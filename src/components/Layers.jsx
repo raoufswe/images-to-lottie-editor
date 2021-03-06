@@ -12,7 +12,7 @@ export default function Layers() {
       </Heading>
       {lottieFile.layers.map((layer) => (
         <Flex
-          key={layer.nm}
+          key={layer.refId}
           onClick={() => setSelectedLayer(layer)}
           alignItems="center"
           cursor="pointer"
