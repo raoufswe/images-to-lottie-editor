@@ -14,7 +14,6 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileEncode)
 
 export default function Modal() {
-  const [disableSubmit, setDisableSubmit] = useState(true)
   const [lottieUrl, setLottieUrl] = useState("")
   const getLottie = useGetLottie()
   const errorToast = useErrorToast()
@@ -43,7 +42,7 @@ export default function Modal() {
 
   return (
     <>
-      <ChakaraModal isOpen={true} isCentered size="xl" closeOnOverlayClick={false}>
+      <ChakaraModal isOpen={true} isCentered size="xl" closeOnOverlayClick={false} m="4">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Get started!</ModalHeader>
@@ -64,7 +63,7 @@ export default function Modal() {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onSubmit} isDisabled={(!files.length && !lottieUrl) || getLottie.isLoading || disableSubmit}>
+            <Button colorScheme="blue" mr={3} onClick={onSubmit} isDisabled={(!files.length && !lottieUrl) || getLottie.isLoading}>
               Edit
             </Button>
           </ModalFooter>
