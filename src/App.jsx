@@ -8,8 +8,8 @@ import Layers from "./components/Layers"
 import LayerOptions from "./components/LayerOptions"
 
 function App() {
-  const { setImage, visibleLayers } = useStore()
-  if (!visibleLayers.length) return <BoardingModal />
+  const { setImage, lottieFile } = useStore()
+  if (!lottieFile) return <BoardingModal />
 
   return (
     <Grid gridTemplateColumns="1fr 2fr 1fr">

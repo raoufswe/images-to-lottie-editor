@@ -18,7 +18,7 @@ export default function Modal() {
   const getLottie = useGetLottie()
   const errorToast = useErrorToast()
   const [files, setFiles] = useState([])
-  const { setImage, setRemoteLottieFile, resetLottieFile } = useStore()
+  const { setImage, setRemoteLottieFile } = useStore()
 
   const onSubmit = () => {
     try {
@@ -39,10 +39,6 @@ export default function Modal() {
   useEffect(() => {
     if (getLottie.data) setRemoteLottieFile(getLottie.data)
   }, [getLottie.data, setRemoteLottieFile])
-
-  useEffect(() => {
-    resetLottieFile()
-  }, [resetLottieFile])
 
   return (
     <>

@@ -5,26 +5,23 @@ import { composeNewLayer, deleteLayer, updateOpacity, resizeAsset, getAsset, mov
 import genUuid from "uuid-random"
 
 const useStore = create((set, get) => ({
-  lottieFile: baseLottie,
+  lottieFile: null,
   selectedLayer: null,
   selectedAsset: null,
-  visibleLayers: baseLottie.layers,
+  visibleLayers: null,
   opacity: null,
   w: null,
   h: null,
   x: null,
   y: null,
   fr: null,
-  resetLottieFile: () => {
-    set({ lottieFile: baseLottie, visibleLayers: baseLottie.layers, selectedLayer: null, selectedAsset: null })
-  },
   setRemoteLottieFile: (lottieFile) => {
     let clonedLottieFile = JSON.parse(JSON.stringify(lottieFile))
     clonedLottieFile.layers = clonedLottieFile.layers.map((layer) => ({ ...layer, uuid: genUuid() }))
     set({ lottieFile: clonedLottieFile, visibleLayers: clonedLottieFile.layers })
   },
   setImage: (image, externalBase64) => {
-    const lottieFile = composeNewLayer(get().lottieFile, { image, externalBase64 })
+    const lottieFile = composeNewLayer(get().lottieFile ?? baseLottie, { image, externalBase64 })
     set({ lottieFile, visibleLayers: lottieFile.layers })
   },
   setSelectedLayer: (selectedLayer) => {
