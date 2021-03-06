@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Modal as ChakaraModal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Divider, Box, Text } from "@chakra-ui/react"
 import { FilePond, registerPlugin } from "react-filepond"
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
@@ -15,7 +15,7 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, F
 
 export default function Modal() {
   const [lottieUrl, setLottieUrl] = useState("")
-  const lottieQuery = useGetLottie(lottieUrl)
+  const getLottie = useGetLottie()
   const errorToast = useErrorToast()
   const [files, setFiles] = useState([])
   const { setImage, setRemoteLottieFile } = useStore()
@@ -24,10 +24,15 @@ export default function Modal() {
     if (files.length) {
       const { file, getFileEncodeDataURL } = files[0]
       setImage(file, getFileEncodeDataURL())
-    } else if (lottieUrl) setRemoteLottieFile(lottieQuery.data)
-    else if (lottieQuery.isError) errorToast()
+    } else if (lottieUrl) getLottie.mutate(lottieUrl)
+    else if (getLottie.isError) errorToast()
     else errorToast({ description: "You must add an image or LottieFile to get started" })
   }
+
+  useEffect(() => {
+    if (getLottie.data) setRemoteLottieFile(getLottie.data)
+  }, [getLottie.data, setRemoteLottieFile])
+
   return (
     <>
       <ChakaraModal isOpen={true} isCentered size="xl" closeOnOverlayClick={false}>
@@ -51,7 +56,7 @@ export default function Modal() {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onSubmit} isDisabled={(!files.length && !lottieUrl) || lottieQuery.isLoading}>
+            <Button colorScheme="blue" mr={3} onClick={onSubmit} isDisabled={(!files.length && !lottieUrl) || getLottie.isLoading}>
               Edit
             </Button>
           </ModalFooter>
