@@ -16,8 +16,9 @@ const useStore = create((set, get) => ({
   y: null,
   fr: null,
   setRemoteLottieFile: (lottieFile) => {
-    lottieFile.layers = lottieFile.layers.map((layer) => ({ ...layer, uuid: genUuid() }))
-    set({ lottieFile, visibleLayers: lottieFile.layers })
+    let clonedLottieFile = JSON.parse(JSON.stringify(lottieFile))
+    clonedLottieFile.layers = clonedLottieFile.layers.map((layer) => ({ ...layer, uuid: genUuid() }))
+    set({ lottieFile: clonedLottieFile, visibleLayers: clonedLottieFile.layers })
   },
   setImage: (image, externalBase64) => {
     const lottieFile = composeNewLayer(get().lottieFile, { image, externalBase64 })

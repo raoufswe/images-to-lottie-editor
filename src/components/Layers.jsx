@@ -4,13 +4,14 @@ import { Player } from "@lottiefiles/react-lottie-player"
 
 export default function Layers() {
   const { lottieFile, selectedLayer, setSelectedLayer } = useStore()
+  let clonedLottieFile = JSON.parse(JSON.stringify(lottieFile))
 
   return (
     <Flex flexDir="column">
       <Heading size="sm" mb="4" px="4">
         Layers
       </Heading>
-      {lottieFile.layers.map((layer) => (
+      {clonedLottieFile.layers.map((layer) => (
         <Flex
           key={layer.uuid}
           onClick={() => setSelectedLayer(layer)}
@@ -25,7 +26,7 @@ export default function Layers() {
           borderRadius="4px"
         >
           <Box w="48px" h="48x" borderRadius="4px " bg="white">
-            <Player src={{ ...lottieFile, layers: lottieFile.layers.filter((i) => i.uuid === layer.uuid) }} />
+            <Player autoplay loop src={{ ...clonedLottieFile, layers: clonedLottieFile.layers.filter((i) => i.uuid === layer.uuid) }} />
           </Box>
           <Text ml="2" fontSize="sm">
             {layer.nm}
