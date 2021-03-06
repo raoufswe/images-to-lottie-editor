@@ -49,7 +49,7 @@ export default function Modal() {
           <ModalHeader>Get started!</ModalHeader>
           <ModalBody>
             <Input
-              label="Add LottieFile URL"
+              label="Add LottieFile URL (experimental)"
               placeholder="https://lottiefile.com/example"
               value={lottieUrl}
               onChange={({ target }) => setLottieUrl(target.value)}
