@@ -19,11 +19,8 @@ const useStore = create((set, get) => ({
     set({ lottieFile, visibleLayers: lottieFile.layers })
   },
   setImage: (image, externalBase64) => {
-    const [_, fileExtension] = image.type.split("/")
-    if (["svg", "png", "jpeg", "jpg"].includes(fileExtension)) {
-      const lottieFile = composeNewLayer(get().lottieFile, { image, externalBase64 })
-      set({ lottieFile, visibleLayers: lottieFile.layers })
-    }
+    const lottieFile = composeNewLayer(get().lottieFile, { image, externalBase64 })
+    set({ lottieFile, visibleLayers: lottieFile.layers })
   },
   setSelectedLayer: (selectedLayer) => {
     const selectedAsset = getAsset(get().lottieFile, selectedLayer.refId)
