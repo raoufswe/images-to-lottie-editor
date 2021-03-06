@@ -22,7 +22,8 @@ export default function Modal() {
 
   const onSubmit = () => {
     try {
-      if (files.length) {
+      if (files.length && lottieUrl) errorToast({ description: "You need to pick one option only" })
+      else if (files.length) {
         const { file, getFileEncodeDataURL, fileExtension } = files[0]
         if (["svg", "png", "jpeg", "jpg"].includes(fileExtension)) setImage(file, getFileEncodeDataURL())
         else errorToast({ description: "File format is not supported" })
