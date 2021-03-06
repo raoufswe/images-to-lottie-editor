@@ -184,13 +184,14 @@ export const resizeAsset = (lottieFile, selected_layer, { h, w }) => {
   let cloned = JSON.parse(JSON.stringify(lottieFile))
   if (cloned?.assets) {
     cloned.assets = [...cloned.assets].map((asset) => {
-      if (asset.id === selected_layer.uuid) {
+      if (asset.id === selected_layer.refId) {
         asset.h = h ? h : asset.h
         asset.w = w ? w : asset.w
       }
       return asset
     })
   }
+  console.log(cloned?.assets)
 
   return cloned
 }
