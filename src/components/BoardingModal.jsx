@@ -23,9 +23,13 @@ export default function Modal() {
   const onSubmit = () => {
     if (files.length) {
       const { file, getFileEncodeDataURL } = files[0]
-      setImage(file, getFileEncodeDataURL())
-    } else if (lottieUrl) getLottie.mutate(lottieUrl)
-    else if (getLottie.isError) errorToast()
+      const [_, fileExtension] = file.type.split("/")
+      if (["svg", "png", "jpeg", "jpg"].includes(fileExtension)) setImage(file, getFileEncodeDataURL())
+      else errorToast({ description: "File format is not supported" })
+    } else if (lottieUrl) {
+      if (lottieUrl.includes(".json")) getLottie.mutate(lottieUrl)
+      else errorToast({ description: "URL must be type of Lottie file" })
+    } else if (getLottie.isError) errorToast()
     else errorToast({ description: "You must add an image or LottieFile to get started" })
   }
 
