@@ -52,11 +52,11 @@ export const composeNewLayer = (lottieFile, { image, externalBase64 = "" }) => {
   };
 };
 
-const bounceAnimation = {
+const bounceAnimation = (totalTime) => ({
   o: { a: 0, k: 100, ix: 11 },
   r: { a: 0, k: 0, ix: 10 },
   p: { k: [0, 0] },
-  a: { a: 0, k: [402.391, 302.085, 0], ix: 2 },
+  a: { a: 0, k: [0, 0], ix: 2 },
   s: {
     a: 1,
     k: [
@@ -69,22 +69,22 @@ const bounceAnimation = {
       {
         i: { x: [0.667, 0.667, 0.667], y: [1, 1, 1] },
         o: { x: [0.333, 0.333, 0.333], y: [0, 0, 0] },
-        t: 13.5,
+        t: (totalTime / 3) * 2,
         s: [100, 50, 100],
       },
       {
         i: { x: [0.667, 0.667, 0.667], y: [1, 1, 1] },
         o: { x: [0.333, 0.333, 0.333], y: [0, 0, 0] },
-        t: 27,
+        t: totalTime,
         s: [100, 100, 100],
       },
-      { t: 59.0000024031193, s: [100, 100, 100] },
+      { t: totalTime, s: [100, 100, 100] },
     ],
     ix: 6,
   },
-};
+});
 
-const appearAnimation = {
+const appearAnimation = (totalTime) => ({
   ty: "tr",
   o: { k: 100 },
   r: { k: 0 },
@@ -102,24 +102,24 @@ const appearAnimation = {
       {
         i: { x: [0.67, 0.67, 0.67], y: [1, 1, 1] },
         o: { x: [0.33, 0.33, 0.33], y: [0, 0, 0] },
-        t: 34,
-        s: [135, 135, 100],
+        t: (totalTime / 3) * 2,
+        s: [100, 100, 100],
       },
       {
         i: { x: [0.83, 0.83, 0.83], y: [1, 1, 1] },
         o: { x: [0.33, 0.33, 0.33], y: [0, 0, 0] },
-        t: 45,
-        s: [131, 131, 100],
+        t: totalTime,
+        s: [100, 100, 100],
       },
-      { t: 50, s: [133, 133, 100] },
+      { t: totalTime * 2, s: [99, 99, 100] },
     ],
     ix: 6,
   },
   sk: { k: 0 },
   sa: { k: 0 },
-};
+});
 
-const rotateAnimation = {
+const rotateAnimation = (totalTime) => ({
   ty: "tr",
   o: { k: 100 },
   r: { k: 0 },
@@ -136,12 +136,12 @@ const rotateAnimation = {
       {
         i: { x: 0.67, y: 1 },
         o: { x: 0.33, y: 0 },
-        t: 37,
+        t: totalTime,
         s: [0, 384, 0],
         to: [0, -6.63, 0],
         ti: [0, -0.48, 0],
       },
-      { t: 26, s: [0, 0, 0] },
+      { t: totalTime, s: [0, 0, 0] },
     ],
     ix: 2,
     a: 1,
@@ -150,13 +150,13 @@ const rotateAnimation = {
   s: { k: [100, 100] },
   sk: { k: 0 },
   sa: { k: 0 },
-};
+});
 
 export const animations = [
   { name: "Bounce", value: bounceAnimation },
   { name: "Appear", value: appearAnimation },
   { name: "Drop down", value: rotateAnimation },
-  { name: "Default", value: {} },
+  { name: "Default", value: (totalTime) => {} },
 ];
 
 export const deleteLayer = (lottieFile, selected_layer) => {
@@ -229,8 +229,8 @@ export const updateAnimation = (lottieFile, selected_layer, index) => {
 
   cloned.layers = [...cloned.layers].map((layer) => {
     if (layer.refId === selected_layer?.refId) {
-      index === 0 && (animations[index].value.a = layer.ks.a);
-      layer.ks = animations[index].value;
+      console.log(lottieFile.op);
+      layer.ks = animations[index].value(lottieFile.op);
       return layer;
     }
     return layer;
