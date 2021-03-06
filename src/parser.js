@@ -1,6 +1,9 @@
+import genUuid from "uuid-random"
+
 export const composeNewLayer = (lottieFile, { image, externalBase64 = "" }) => {
   let cloned = JSON.parse(JSON.stringify(lottieFile))
-  const refId = `refId-${image.name}-${new Date()}`
+  const refId = `refId-${image.name}-${Date.now()}`
+  const uuid = genUuid()
   return {
     ...cloned,
     assets: [
@@ -11,7 +14,8 @@ export const composeNewLayer = (lottieFile, { image, externalBase64 = "" }) => {
         h: 500,
         u: "",
         p: image?.base64 ?? externalBase64,
-        e: 1
+        e: 1,
+        uuid
       }
     ],
     layers: [
@@ -22,6 +26,7 @@ export const composeNewLayer = (lottieFile, { image, externalBase64 = "" }) => {
         ty: 2,
         nm: image.name,
         refId,
+        uuid,
         sr: 1,
         ks: {
           o: { a: 0, k: 100, ix: 11 },
@@ -161,15 +166,15 @@ export const animations = [
 
 export const deleteLayer = (lottieFile, selected_layer) => {
   let cloned = JSON.parse(JSON.stringify(lottieFile))
-  if (cloned?.assets) cloned.assets = cloned.assets.filter((asset) => asset.id !== selected_layer.refId)
-  cloned.layers = cloned.layers.filter((layer) => layer.refId !== selected_layer.refId)
+  if (cloned?.assets) cloned.assets = cloned.assets.filter((asset) => asset.id !== selected_layer.uuid)
+  cloned.layers = cloned.layers.filter((layer) => layer.uuid !== selected_layer.uuid)
   return cloned
 }
 
 export const updateOpacity = (lottieFile, selected_layer, opacity) => {
   let cloned = JSON.parse(JSON.stringify(lottieFile))
   cloned.layers = [...cloned.layers].map((layer) => {
-    if (layer.refId === selected_layer?.refId) layer.ks.o.k = opacity
+    if (layer.uuid === selected_layer?.uuid) layer.ks.o.k = opacity
     return layer
   })
   return cloned
@@ -179,7 +184,7 @@ export const resizeAsset = (lottieFile, selected_layer, { h, w }) => {
   let cloned = JSON.parse(JSON.stringify(lottieFile))
   if (cloned?.assets) {
     cloned.assets = [...cloned.assets].map((asset) => {
-      if (asset.id === selected_layer.refId) {
+      if (asset.id === selected_layer.uuid) {
         asset.h = h ? h : asset.h
         asset.w = w ? w : asset.w
       }
@@ -193,7 +198,7 @@ export const resizeAsset = (lottieFile, selected_layer, { h, w }) => {
 export const moveAsset = (lottieFile, selected_layer, { x, y }) => {
   let cloned = JSON.parse(JSON.stringify(lottieFile))
   cloned.layers = [...cloned.layers].map((layer) => {
-    if (layer.refId === selected_layer.refId) {
+    if (layer.uuid === selected_layer.uuid) {
       layer.ks.a = {
         ...layer.ks.a,
         k: [x ? parseFloat(x) : parseFloat(layer.ks.a.k[0]), y ? parseFloat(y) : parseFloat(layer.ks.a.k[1]), 0]
@@ -219,7 +224,7 @@ export const updateAnimation = (lottieFile, selected_layer, index) => {
   let cloned = JSON.parse(JSON.stringify(lottieFile))
 
   cloned.layers = [...cloned.layers].map((layer) => {
-    if (layer.refId === selected_layer?.refId) {
+    if (layer.uuid === selected_layer?.uuid) {
       layer.ks = animations[index].value(lottieFile.op)
       return layer
     }

@@ -12,7 +12,7 @@ export default function Layers() {
       </Heading>
       {lottieFile.layers.map((layer) => (
         <Flex
-          key={layer.refId}
+          key={layer.uuid}
           onClick={() => setSelectedLayer(layer)}
           alignItems="center"
           cursor="pointer"
@@ -20,12 +20,12 @@ export default function Layers() {
           py="2"
           px="4"
           mb="2"
-          bg={selectedLayer?.refId === layer.refId ? "teal" : ""}
+          bg={selectedLayer?.uuid === layer.uuid ? "teal" : ""}
           _hover={{ background: "teal" }}
           borderRadius="4px"
         >
           <Box w="48px" h="48x" borderRadius="4px " bg="white">
-            <Player src={{ ...lottieFile, layers: lottieFile.layers.filter((i) => i.refId === layer.refId) }} />
+            <Player src={{ ...lottieFile, layers: lottieFile.layers.filter((i) => i.uuid === layer.uuid) }} />
           </Box>
           <Text ml="2" fontSize="sm">
             {layer.nm}

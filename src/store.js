@@ -2,6 +2,7 @@ import baseLottie from "./assets/base.json"
 import create from "zustand"
 import { createTrackedSelector } from "react-tracked"
 import { composeNewLayer, deleteLayer, updateOpacity, resizeAsset, getAsset, moveAsset, updateAnimation, updateFrameRate } from "./parser"
+import genUuid from "uuid-random"
 
 const useStore = create((set, get) => ({
   lottieFile: baseLottie,
@@ -15,7 +16,7 @@ const useStore = create((set, get) => ({
   y: null,
   fr: null,
   setRemoteLottieFile: (lottieFile) => {
-    lottieFile.layers = lottieFile.layers.map((layer) => ({ ...layer, refId: `refId-${layer.nm}-${new Date()}` }))
+    lottieFile.layers = lottieFile.layers.map((layer) => ({ ...layer, uuid: genUuid() }))
     set({ lottieFile, visibleLayers: lottieFile.layers })
   },
   setImage: (image, externalBase64) => {
@@ -35,14 +36,14 @@ const useStore = create((set, get) => ({
   },
   hideLayer: () => {
     set({
-      visibleLayers: get().visibleLayers.filter((layer) => layer.refId !== get().selectedLayer?.refId)
+      visibleLayers: get().visibleLayers.filter((layer) => layer.uuid !== get().selectedLayer?.uuid)
     })
   },
   showLayer: () => {
     set({ visibleLayers: get().visibleLayers.concat(get().selectedLayer) })
   },
   isSelectedLayerVisible: () => {
-    return get().visibleLayers.some((layer) => layer.refId === get().selectedLayer?.refId)
+    return get().visibleLayers.some((layer) => layer.uuid === get().selectedLayer?.uuid)
   },
   deleteLayer: () => {
     const lottieFile = deleteLayer(get().lottieFile, get().selectedLayer)
