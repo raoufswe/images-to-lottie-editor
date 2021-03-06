@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from "react-query"
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react"
 import App from "./App"
 import theme from "./theme"
-import "./index.css"
 
 const queryClient = new QueryClient()
 

@@ -2,12 +2,14 @@ import { extendTheme } from "@chakra-ui/react"
 
 export default extendTheme({
   styles: {
-    global: {}
+    global: {
+      body: { overflow: "hidden" }
+    }
   },
   fonts: {
-    body: "DM Sans, sans-serif",
-    heading: "DM Sans, sans-serif",
-    mono: "DM Sans, sans-serif"
+    body: "'Montserrat', sans-serif",
+    heading: "'Montserrat', sans-serif",
+    mono: "'Montserrat', sans-serif"
   },
   config: {
     initialColorMode: "dark",
