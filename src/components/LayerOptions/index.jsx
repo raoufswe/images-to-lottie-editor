@@ -14,7 +14,6 @@ export default function LayerOptions() {
     x,
     y,
     selectedLayer,
-    isSelectedLayerVisible,
     hideLayer,
     showLayer,
     selectedAsset,
@@ -23,10 +22,10 @@ export default function LayerOptions() {
     setAssetHeight,
     setAssetXPosition,
     setAssetYPosition,
-    deleteLayer
+    deleteLayer,
+    visibleLayers
   } = useStore()
 
-  const isVisible = isSelectedLayerVisible()
   if (!selectedLayer) return null
   return (
     <Flex flexDir="column">
@@ -34,7 +33,7 @@ export default function LayerOptions() {
         id="isVisible"
         label="Layer visibility:"
         defaultChecked={true}
-        isChecked={isVisible}
+        isChecked={visibleLayers.some((layer) => layer.uuid === selectedLayer.uuid)}
         onChange={({ target }) => (target.checked ? showLayer() : hideLayer())}
       />
       <Slider label="Opacity:" onChange={setOpacity} defaultValue={opacity} />

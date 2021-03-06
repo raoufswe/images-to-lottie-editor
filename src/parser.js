@@ -57,7 +57,7 @@ export const composeNewLayer = (lottieFile, { image, externalBase64 = "" }) => {
   }
 }
 
-const bounceAnimation = (totalTime,a) => ({
+const bounceAnimation = (totalTime, a) => ({
   o: { a: 0, k: 100, ix: 11 },
   r: { a: 0, k: 0, ix: 10 },
   p: { k: [0, 0] },
@@ -89,7 +89,7 @@ const bounceAnimation = (totalTime,a) => ({
   }
 })
 
-const appearAnimation = (totalTime,a) => ({
+const appearAnimation = (totalTime, a) => ({
   ty: "tr",
   o: { k: 100 },
   r: { k: 0 },
@@ -124,7 +124,7 @@ const appearAnimation = (totalTime,a) => ({
   sa: { k: 0 }
 })
 
-const rotateAnimation = (totalTime,a) => ({
+const rotateAnimation = (totalTime, a) => ({
   ty: "tr",
   o: { k: 100 },
   r: { k: 0 },
@@ -161,7 +161,7 @@ export const animations = [
   { name: "Bounce", value: bounceAnimation },
   { name: "Appear", value: appearAnimation },
   { name: "Drop down", value: rotateAnimation },
-  { name: "Default", value: (totalTime,a) => ({a}) }
+  { name: "Default", value: (totalTime, a) => ({ a }) }
 ]
 
 export const deleteLayer = (lottieFile, selected_layer) => {
@@ -191,15 +191,13 @@ export const resizeAsset = (lottieFile, selected_layer, { h, w }) => {
       return asset
     })
   }
-  console.log(cloned?.assets)
-
   return cloned
 }
 
 export const moveAsset = (lottieFile, selected_layer, { x, y }) => {
   let cloned = JSON.parse(JSON.stringify(lottieFile))
   cloned.layers = [...cloned.layers].map((layer) => {
-    if (layer.uuid === selected_layer.uuid && x !== '-' && y !== '-') {
+    if (layer.uuid === selected_layer.uuid && x !== "-" && y !== "-") {
       layer.ks.a = {
         ...layer.ks.a,
         k: [x ? parseFloat(x) : parseFloat(layer.ks.a.k[0]), y ? parseFloat(y) : parseFloat(layer.ks.a.k[1]), 0]
@@ -226,7 +224,7 @@ export const updateAnimation = (lottieFile, selected_layer, index) => {
 
   cloned.layers = [...cloned.layers].map((layer) => {
     if (layer.uuid === selected_layer?.uuid) {
-      layer.ks = animations[index].value(lottieFile.op,layer.ks.a)
+      layer.ks = animations[index].value(lottieFile.op, layer.ks.a)
       return layer
     }
     return layer

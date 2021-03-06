@@ -43,9 +43,6 @@ const useStore = create((set, get) => ({
   showLayer: () => {
     set({ visibleLayers: get().visibleLayers.concat(get().selectedLayer) })
   },
-  isSelectedLayerVisible: () => {
-    return get().visibleLayers.some((layer) => layer.uuid === get().selectedLayer?.uuid)
-  },
   deleteLayer: () => {
     const lottieFile = deleteLayer(get().lottieFile, get().selectedLayer)
     set({ lottieFile, visibleLayers: lottieFile.layers, selectedLayer: null })
