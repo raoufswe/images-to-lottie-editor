@@ -1,6 +1,6 @@
 
 <p align="center">
-    <img alt="isthereacovidcureyet" src="https://static1.lottiefiles.com/images/v3/lf-intergrations-logo.svg" width="90" />
+    <img alt="isthereacovidcureyet" src="https://api.framer.com/store/assets/airbnb/lottie/artwork.png?YzVmOWJ" width="90" />
 </p>
 <h1 align="center">
   Images To Lottie editor
