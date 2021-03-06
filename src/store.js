@@ -1,25 +1,29 @@
-import testLottie from "./assets/among-us.json"
+import baseLottie from "./assets/base.json"
 import create from "zustand"
 import { createTrackedSelector } from "react-tracked"
 import { composeNewLayer, deleteLayer, updateOpacity, resizeAsset, getAsset, moveAsset, updateAnimation, updateFrameRate } from "./parser"
 
 const useStore = create((set, get) => ({
-  lottieFile: testLottie,
+  lottieFile: baseLottie,
   selectedLayer: null,
   selectedAsset: null,
-  visibleLayers: testLottie.layers,
+  visibleLayers: baseLottie.layers,
   opacity: null,
   w: null,
   h: null,
   x: null,
   y: null,
   fr: null,
-  setImage: (image) => {
-    const lottieFile = composeNewLayer(get().lottieFile, image)
+  setRemoteLottieFile: (lottieFile) => {
+    lottieFile.layers = lottieFile.layers.map((layer) => ({ ...layer, refId: `refId-${layer.nm}-${new Date()}` }))
+    set({ lottieFile, visibleLayers: lottieFile.layers })
+  },
+  setImage: (image, externalBase64) => {
+    const lottieFile = composeNewLayer(get().lottieFile, { image, externalBase64 })
     set({ lottieFile, visibleLayers: lottieFile.layers })
   },
   setSelectedLayer: (selectedLayer) => {
-    const selectedAsset = getAsset(get().lottieFile, selectedLayer.nm)
+    const selectedAsset = getAsset(get().lottieFile, selectedLayer.refId)
     set({
       selectedLayer,
       selectedAsset,
@@ -31,33 +35,29 @@ const useStore = create((set, get) => ({
   },
   hideLayer: () => {
     set({
-      visibleLayers: get().visibleLayers.filter((layer) => layer.nm !== get().selectedLayer?.nm)
+      visibleLayers: get().visibleLayers.filter((layer) => layer.refId !== get().selectedLayer?.refId)
     })
   },
   showLayer: () => {
     set({ visibleLayers: get().visibleLayers.concat(get().selectedLayer) })
   },
   isSelectedLayerVisible: () => {
-    return get().visibleLayers.some((layer) => layer.nm === get().selectedLayer?.nm)
+    return get().visibleLayers.some((layer) => layer.refId === get().selectedLayer?.refId)
   },
   deleteLayer: () => {
     const lottieFile = deleteLayer(get().lottieFile, get().selectedLayer)
-    set({ lottieFile })
+    set({ lottieFile, visibleLayers: lottieFile.layers, selectedLayer: null })
   },
   setOpacity: (opacity) => {
     const lottieFile = updateOpacity(get().lottieFile, get().selectedLayer, opacity)
     set({ opacity, lottieFile })
   },
   setAssetWidth: (w) => {
-    const lottieFile = resizeAsset(get().lottieFile, get().selectedLayer, {
-      w
-    })
+    const lottieFile = resizeAsset(get().lottieFile, get().selectedLayer, { w })
     set({ w, lottieFile })
   },
   setAssetHeight: (h) => {
-    const lottieFile = resizeAsset(get().lottieFile, get().selectedLayer, {
-      h
-    })
+    const lottieFile = resizeAsset(get().lottieFile, get().selectedLayer, { h })
     set({ h, lottieFile })
   },
   setAssetXPosition: (x) => {

@@ -1,4 +1,4 @@
-import { Flex, Box } from "@chakra-ui/react"
+import { Flex, Box, Divider } from "@chakra-ui/react"
 import useStore from "../../store"
 import NumberInput from "../NumberInput"
 import Switch from "../Switch"
@@ -27,18 +27,16 @@ export default function LayerOptions() {
   } = useStore()
 
   const isVisible = isSelectedLayerVisible()
-
+  if (!selectedLayer) return null
   return (
-    <Flex flexDir="column" w="100%" h="100%">
+    <Flex flexDir="column">
       <Switch
         id="isVisible"
         label="Layer visibility:"
         defaultChecked={true}
         isChecked={isVisible}
         onChange={({ target }) => (target.checked ? showLayer() : hideLayer())}
-        ss
       />
-
       <Slider label="Opacity:" onChange={setOpacity} defaultValue={opacity} />
       {selectedAsset && (
         <>
@@ -48,12 +46,11 @@ export default function LayerOptions() {
           <NumberInput label="Position Y" name="x" defaultValue={selectedLayer.ks.a.k[1]} onChange={setAssetYPosition} value={y} />
         </>
       )}
-
       <AnimationsOptions />
-
       <Box>
         <AlertDialog title="Delete layer" onDelete={deleteLayer} />
       </Box>
+      <Divider my="4" />
     </Flex>
   )
 }
