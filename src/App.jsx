@@ -38,13 +38,11 @@ function App() {
 
 function MainPlayer() {
   const { lottieFile, visibleLayers } = useStore()
+  let clonedVisibleLayers = JSON.parse(
+    JSON.stringify(lottieFile.layers.filter((i) => visibleLayers.map((i) => i.nm).includes(i.nm)).map(({ uuid, ...layer }) => ({ ...layer })))
+  )
   return (
-    <Player
-      autoplay
-      loop
-      src={{ ...lottieFile, layers: lottieFile.layers.filter((i) => visibleLayers.map((i) => i.uuid).includes(i.uuid)) }}
-      style={{ width: "100%", height: "100%", borderRadius: "8px 8px 0 0" }}
-    >
+    <Player autoplay loop src={{ ...lottieFile, layers: clonedVisibleLayers }} style={{ width: "100%", height: "100%", borderRadius: "8px 8px 0 0" }}>
       <Controls visible={true} buttons={["play", "repeat", "frame", "debug"]} style={{ borderRadius: "8px" }} />
     </Player>
   )
