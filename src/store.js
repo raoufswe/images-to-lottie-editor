@@ -15,6 +15,9 @@ const useStore = create((set, get) => ({
   x: null,
   y: null,
   fr: null,
+  resetLottieFile: () => {
+    set({ lottieFile: baseLottie, visibleLayers: baseLottie.layers, selectedLayer: null, selectedAsset: null })
+  },
   setRemoteLottieFile: (lottieFile) => {
     let clonedLottieFile = JSON.parse(JSON.stringify(lottieFile))
     clonedLottieFile.layers = clonedLottieFile.layers.map((layer) => ({ ...layer, uuid: genUuid() }))
