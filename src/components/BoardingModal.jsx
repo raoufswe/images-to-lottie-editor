@@ -14,6 +14,7 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileEncode)
 
 export default function Modal() {
+  const [disableSubmit, setDisableSubmit] = useState(true)
   const [lottieUrl, setLottieUrl] = useState("")
   const getLottie = useGetLottie()
   const errorToast = useErrorToast()
@@ -21,15 +22,19 @@ export default function Modal() {
   const { setImage, setRemoteLottieFile } = useStore()
 
   const onSubmit = () => {
-    if (files.length) {
-      const { file, getFileEncodeDataURL, fileExtension } = files[0]
-      if (["svg", "png", "jpeg", "jpg"].includes(fileExtension)) setImage(file, getFileEncodeDataURL())
-      else errorToast({ description: "File format is not supported" })
-    } else if (lottieUrl) {
-      if (lottieUrl.includes(".json")) getLottie.mutate(lottieUrl)
-      else errorToast({ description: "URL must be type of Lottie file" })
-    } else if (getLottie.isError) errorToast()
-    else errorToast({ description: "You must add an image or LottieFile to get started" })
+    try {
+      if (files.length) {
+        const { file, getFileEncodeDataURL, fileExtension } = files[0]
+        if (["svg", "png", "jpeg", "jpg"].includes(fileExtension)) setImage(file, getFileEncodeDataURL())
+        else errorToast({ description: "File format is not supported" })
+      } else if (lottieUrl) {
+        if (lottieUrl.includes(".json")) getLottie.mutate(lottieUrl)
+        else errorToast({ description: "URL must be type of Lottie file" })
+      } else if (getLottie.isError) errorToast()
+      else errorToast({ description: "You must add an image or LottieFile to get started" })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   useEffect(() => {
@@ -59,7 +64,7 @@ export default function Modal() {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onSubmit} isDisabled={(!files.length && !lottieUrl) || getLottie.isLoading}>
+            <Button colorScheme="blue" mr={3} onClick={onSubmit} isDisabled={(!files.length && !lottieUrl) || getLottie.isLoading || disableSubmit}>
               Edit
             </Button>
           </ModalFooter>
