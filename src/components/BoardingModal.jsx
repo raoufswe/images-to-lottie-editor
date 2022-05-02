@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react"
-import { Modal as ChakaraModal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Divider, Box, Text } from "@chakra-ui/react"
+import { Modal as ChakaraModal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Divider, Box, Text, Select } from "@chakra-ui/react"
 import { FilePond, registerPlugin } from "react-filepond"
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
 import FilePondPluginImagePreview from "filepond-plugin-image-preview"
 import FilePondPluginFileEncode from "filepond-plugin-file-encode"
 import Input from "./Input"
+import NumberInput from "./NumberInput"
 import useStore from "../store"
 import { useErrorToast } from "../hooks/useToast"
 import useGetLottie from "../hooks/useGetLottie"
@@ -18,16 +19,21 @@ export default function Modal() {
   const getLottie = useGetLottie()
   const errorToast = useErrorToast()
   const [files, setFiles] = useState([])
-  const { setImage, setRemoteLottieFile } = useStore()
+  const [importMethod, setImportMethod] = useState('simple')
+  const [framesPerImage, setFramesPerImage] = useState(1)
+  const { setImage, setRemoteLottieFile, setDuration } = useStore()
 
   const onSubmit = () => {
     try {
       if (files.length && lottieUrl) errorToast({ description: "You need to pick one option only" })
       else if (files.length) {
-        const { file, getFileEncodeDataURL, fileExtension } = files[0]
-        if (["svg", "png", "jpeg", "jpg"].includes(fileExtension)) setImage(file, getFileEncodeDataURL())
-        else errorToast({ description: "File format is not supported" })
-      } else if (lottieUrl) {
+        files.forEach(({ file, getFileEncodeDataURL, fileExtension }, number) => {
+          if (["svg", "png", "jpeg", "jpg"].includes(fileExtension)) setImage(file, getFileEncodeDataURL(), importMethod, framesPerImage)
+          else errorToast({ description: "File format is not supported" })
+        })
+		if (importMethod === 'sequence') setDuration(files.length * framesPerImage)
+      }
+      else if (lottieUrl) {
         if (lottieUrl.includes(".json")) getLottie.mutate(lottieUrl)
         else errorToast({ description: "URL must be type of Lottie file" })
       } else if (getLottie.isError) errorToast()
@@ -59,7 +65,21 @@ export default function Modal() {
               Or upload your image here directly
             </Text>
             <Box mt="4">
-              <FilePond files={files} onupdatefiles={setFiles} labelIdle='Drag & Drop your image or <span class="filepond--label-action">Browse</span>' />
+
+			  <Text>Multiple images import method:</Text>
+              <Select onChange={({ target }) => setImportMethod(target.value)} mb="4" mt="4">
+                <option value="simple" >simple</option>
+                <option value="sequence">image sequence</option>
+              </Select>
+
+              { importMethod !== "sequence" ? null :
+				  <>
+					<NumberInput label="Frames per Image:" defaultValue={1} min={1} onChange={value => setFramesPerImage(parseInt(value))}/>
+				  </>
+              }
+
+              <FilePond allowMultiple={true} allowReorder={true} files={files} onupdatefiles={setFiles} labelIdle='Drag & Drop your image or <span class="filepond--label-action">Browse</span>' />
+
             </Box>
           </ModalBody>
 
