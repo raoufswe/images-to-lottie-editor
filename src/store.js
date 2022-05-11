@@ -1,7 +1,7 @@
 import baseLottie from "./assets/base.json"
 import create from "zustand"
 import { createTrackedSelector } from "react-tracked"
-import { composeNewLayer, deleteLayer, updateOpacity, resizeAsset, getAsset, moveAsset, updateAnimation, updateFrameRate } from "./parser"
+import { composeNewLayer, deleteLayer, updateOpacity, resizeAsset, getAsset, moveAsset, updateAnimation, updateFrameRate, updateDuration } from "./parser"
 import genUuid from "uuid-random"
 
 const useStore = create((set, get) => ({
@@ -20,8 +20,8 @@ const useStore = create((set, get) => ({
     clonedLottieFile.layers = clonedLottieFile.layers.map((layer) => ({ ...layer, uuid: genUuid() }))
     set({ lottieFile: clonedLottieFile, visibleLayers: clonedLottieFile.layers })
   },
-  setImage: (image, externalBase64) => {
-    const lottieFile = composeNewLayer(get().lottieFile ?? baseLottie, { image, externalBase64 })
+  setImage: (image, externalBase64, method='simple', duration) => {
+    const lottieFile = composeNewLayer(get().lottieFile ?? baseLottie, { image, externalBase64 }, method, duration)
     set({ lottieFile, visibleLayers: lottieFile.layers })
   },
   setSelectedLayer: (selectedLayer) => {
@@ -73,6 +73,10 @@ const useStore = create((set, get) => ({
   },
   setFrameRate: (frameRate) => {
     const lottieFile = updateFrameRate(get().lottieFile, frameRate)
+    set({ lottieFile })
+  },
+  setDuration: (duration) => {
+    const lottieFile = updateDuration(get().lottieFile, duration)
     set({ lottieFile })
   }
 }))

@@ -1,9 +1,16 @@
 import genUuid from "uuid-random"
 
-export const composeNewLayer = (lottieFile, { image, externalBase64 = "" }) => {
+export const composeNewLayer = (lottieFile, { image, externalBase64 = "" }, method, duration) => {
   let cloned = JSON.parse(JSON.stringify(lottieFile))
   const refId = `refId-${image.name}-${Date.now()}`
   const uuid = genUuid()
+
+  const tot = method === 'simple' ? 60.0000024438501 : duration
+
+  const lastLayer = cloned.layers.length ? cloned.layers[cloned.layers.length - 1] : undefined
+  const ip = lastLayer ? lastLayer.op : 0
+  const op = lastLayer ? lastLayer.op + duration : duration
+
   return {
     ...cloned,
     assets: [
@@ -48,8 +55,8 @@ export const composeNewLayer = (lottieFile, { image, externalBase64 = "" }) => {
           }
         },
         ao: 0,
-        ip: 0,
-        op: 60.0000024438501,
+        ip: method === 'simple' ? 0 : ip,
+        op: method === 'simple' ? tot : op,
         st: 0,
         bm: 0
       }
@@ -216,6 +223,12 @@ export const getAsset = (lottieFile, id) => {
 export const updateFrameRate = (lottieFile, newFrameRate) => {
   let cloned = JSON.parse(JSON.stringify(lottieFile))
   cloned.fr = parseFloat(newFrameRate)
+  return cloned
+}
+
+export const updateDuration = (lottieFile, duration) => {
+  let cloned = JSON.parse(JSON.stringify(lottieFile))
+  cloned.op = parseFloat(duration)
   return cloned
 }
 
